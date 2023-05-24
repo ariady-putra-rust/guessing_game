@@ -1,2 +1,2 @@
-# guessing_game
+# Rust Guessing Game
 Introduction to Rust
