@@ -1,5 +1,6 @@
-use rand::*;
-use std::*;
+use std::io::{self, Write};
+
+use rand::Rng;
 
 fn main() {
     // let apples = 5; // immutable
@@ -13,7 +14,7 @@ fn main() {
     let mut guess_count = 1;
     loop {
         println!();
-        println!("Please input your guess: ");
+        print_flush("Please input your guess: ");
         let mut guess = String::new();
         io::stdin()
             .read_line(&mut guess)
@@ -37,7 +38,7 @@ fn main() {
         //     false => println!("Try again!"),
         // }
         match guess.cmp(&secret_number) {
-            cmp::Ordering::Equal => {
+            std::cmp::Ordering::Equal => {
                 println!(
                     "You WIN after {guess_count} guess{}!",
                     match guess_count == 1 {
@@ -49,8 +50,8 @@ fn main() {
                 // return;
                 break;
             }
-            cmp::Ordering::Greater => println!("Too BIG"),
-            cmp::Ordering::Less => println!("Too SMALL"),
+            std::cmp::Ordering::Greater => println!("Too BIG"),
+            std::cmp::Ordering::Less => println!("Too SMALL"),
         }
 
         guess_count += 1;
@@ -59,4 +60,9 @@ fn main() {
     println!();
     println!("Thank you for playing!");
     println!();
+}
+
+fn print_flush(s: &str) {
+    print!("{}", s);
+    io::stdout().flush().expect("Failed to flush!");
 }
