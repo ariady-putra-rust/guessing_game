@@ -7,9 +7,10 @@ fn main() {
     // bananas += 1;
     // println!("bananas+1: {1} and apples: {0}", apples, bananas);
 
-    let secret_number: u32 = rand::thread_rng().gen_range(1..=100);
-    println!("Guess the number! {secret_number}");
+    let secret_number: u8 = rand::thread_rng().gen_range(1..=100);
+    println!("Guess the number!"); // {secret_number}");
 
+    let mut guess_count = 1;
     loop {
         println!();
         println!("Please input your guess: ");
@@ -22,8 +23,8 @@ fn main() {
         // match eq(&secret_number.to_string(), &guess)
 
         /* SHADOWING & TYPE-CASTING */
-        // let guess: u32 = guess.trim().parse().expect("Please type a number!");
-        let guess: u32 = match guess.trim().parse() {
+        // let guess: u8 = guess.trim().parse().expect("Please type a number!");
+        let guess: u8 = match guess.trim().parse() {
             Ok(g) => g,
             Err(_) => {
                 println!("Please type a number!");
@@ -37,7 +38,13 @@ fn main() {
         // }
         match guess.cmp(&secret_number) {
             cmp::Ordering::Equal => {
-                println!("You WIN");
+                println!(
+                    "You WIN after {guess_count} guess{}!",
+                    match guess_count == 1 {
+                        true => "",
+                        false => "es",
+                    }
+                );
                 // exit(0);
                 // return;
                 break;
@@ -45,6 +52,8 @@ fn main() {
             cmp::Ordering::Greater => println!("Too BIG"),
             cmp::Ordering::Less => println!("Too SMALL"),
         }
+
+        guess_count += 1;
     }
 
     println!();
