@@ -3,10 +3,17 @@ use std::io::{self, Write};
 use rand::Rng;
 
 fn main() {
+    /* Variables */
     // let apples = 5; // immutable
     // let mut bananas = 5; // mutable
+    // let apples = apples + 1; // shadowing
     // bananas += 1;
-    // println!("bananas+1: {1} and apples: {0}", apples, bananas);
+    // println!("bananas: {1} and apples: {0}", apples, bananas);
+
+    /* Constants */
+    // const THREE_HOURS_IN_SECONDS: u16 = 60 * 60 * 3;
+    // // let THREE_HOURS_IN_SECONDS = 3; // `THREE_HOURS_IN_SECONDS` is interpreted as a constant pattern
+    // println!("Three hours in seconds is {THREE_HOURS_IN_SECONDS}");
 
     let secret_number: u8 = rand::thread_rng().gen_range(1..=100);
     println!("Guess the number!"); // {secret_number}");
@@ -23,7 +30,7 @@ fn main() {
 
         // match eq(&secret_number.to_string(), &guess)
 
-        /* SHADOWING & TYPE-CASTING */
+        /* Convert String to Integer */
         // let guess: u8 = guess.trim().parse().expect("Please type a number!");
         let guess: u8 = match guess.trim().parse() {
             Ok(g) => g,
