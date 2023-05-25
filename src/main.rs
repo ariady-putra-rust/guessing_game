@@ -55,6 +55,12 @@ fn main() {
     //     index += 1;
     // }
 
+    /* For-each loop */
+    // let a = [10, 20, 30, 40, 50];
+    // for element in a {
+    //     println!("the value is: {element}");
+    // }
+
     let secret_numbers: [u8; 5] = [
         rand::thread_rng().gen_range(1..=100),
         rand::thread_rng().gen_range(1..=100),
