@@ -45,7 +45,7 @@ fn main() {
     let secret_number: u8 = secret_numbers[selection - 1]; // rand::thread_rng().gen_range(1..=100);
     println!("Guess the number!"); // {secret_number}");
 
-    let mut guess_count = 1;
+    let mut guess_count = 0;
     loop {
         println!();
         print_flush("Please input your guess: ");
@@ -60,10 +60,13 @@ fn main() {
         /* Convert String to Integer */
         // let guess: u8 = guess.trim().parse().expect("Please type a number!");
         let guess: u8 = match guess.trim().parse() {
-            Ok(g) => g,
+            Ok(g) => {
+                guess_count += 1;
+                g // expression
+            }
             Err(_) => {
                 println!("Please type a number between [1-100]");
-                continue;
+                continue; // statement
             }
         };
 
@@ -87,8 +90,6 @@ fn main() {
             std::cmp::Ordering::Greater => println!("Too BIG"),
             std::cmp::Ordering::Less => println!("Too SMALL"),
         }
-
-        guess_count += 1;
     }
 
     println!();
@@ -98,5 +99,5 @@ fn main() {
 
 fn print_flush(s: &str) {
     print!("{}", s);
-    io::stdout().flush().expect("Failed to flush!");
+    io::stdout().flush().expect("Failed to flush!")
 }
