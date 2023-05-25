@@ -78,10 +78,7 @@ fn main() {
             std::cmp::Ordering::Equal => {
                 println!(
                     "You WIN after {guess_count} guess{}!",
-                    match guess_count == 1 {
-                        true => "",
-                        false => "es",
-                    }
+                    if guess_count == 1 { "" } else { "es" }
                 );
                 // exit(0);
                 // return;
