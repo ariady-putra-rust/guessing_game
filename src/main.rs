@@ -46,7 +46,7 @@ fn main() {
     println!("Guess the number!"); // {secret_number}");
 
     let mut guess_count = 0;
-    loop {
+    let guess_count = loop {
         println!();
         print_flush("Please input your guess: ");
         let mut guess = String::new();
@@ -76,18 +76,19 @@ fn main() {
         // }
         match guess.cmp(&secret_number) {
             std::cmp::Ordering::Equal => {
-                println!(
-                    "You WIN after {guess_count} guess{}!",
-                    if guess_count == 1 { "" } else { "es" }
-                );
                 // exit(0);
                 // return;
-                break;
+                break guess_count;
             }
             std::cmp::Ordering::Greater => println!("Too BIG"),
             std::cmp::Ordering::Less => println!("Too SMALL"),
         }
-    }
+    };
+
+    println!(
+        "You WIN after {guess_count} guess{}!",
+        if guess_count == 1 { "" } else { "es" }
+    );
 
     println!();
     println!("Thank you for playing!");
