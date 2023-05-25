@@ -47,6 +47,14 @@ fn main() {
     // }
     // println!("End count = {count}");
 
+    /* While loop */
+    // let a = [10, 20, 30, 40, 50];
+    // let mut index = 0;
+    // while index < 5 {
+    //     println!("the value is: {}", a[index]);
+    //     index += 1;
+    // }
+
     let secret_numbers: [u8; 5] = [
         rand::thread_rng().gen_range(1..=100),
         rand::thread_rng().gen_range(1..=100),
