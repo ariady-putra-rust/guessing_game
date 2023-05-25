@@ -3,6 +3,8 @@ use std::io::{self, Write};
 use rand::Rng;
 
 fn main() {
+    println!();
+
     /* Variables */
     // let apples = 5; // immutable
     // let mut bananas = 5; // mutable
@@ -60,6 +62,9 @@ fn main() {
     // for element in a {
     //     println!("the value is: {element}");
     // }
+
+    /* Exercises */
+    exercise_1();
 
     let secret_numbers: [u8; 5] = [
         rand::thread_rng().gen_range(1..=100),
@@ -131,4 +136,87 @@ fn main() {
 fn print_flush(s: &str) {
     print!("{}", s);
     io::stdout().flush().expect("Failed to flush!")
+}
+
+fn exercise_1() {
+    /* Convert temperatures between Fahrenheit and Celsius. */
+    println!("212F = {}C", to_celsius(212.0));
+    println!("100C = {}F", to_fahrenheit(100.0));
+
+    /* Generate the nth Fibonacci number. */
+    println!();
+    println!("Fibonacci [0-10]:");
+    for n in 0..=10 {
+        print!(" {} ", fibonacci(n));
+    }
+    println!();
+
+    /* Print the lyrics to the Christmas carol “The Twelve Days of Christmas,”
+    taking advantage of the repetition in the song. */
+    println!();
+    println!("Christmas Carol");
+    println!();
+    sing_christmas_carol();
+}
+
+fn to_celsius(fahrenheit: f32) -> f32 {
+    (fahrenheit - 32.0) * 5.0 / 9.0
+}
+
+fn to_fahrenheit(celsius: f32) -> f32 {
+    celsius * 9.0 / 5.0 + 32.0
+}
+
+fn fibonacci(n: u8) -> u16 {
+    match n {
+        0 => 0,
+        1 => 1,
+        2 => 1,
+        _ => fibonacci(n - 1) + fibonacci(n - 2),
+    }
+}
+
+fn sing_christmas_carol() {
+    let day = [
+        "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth",
+        "tenth", "eleventh", "twelfth",
+    ];
+    for d in 0..12 {
+        println!(
+            "On the {} day of Christmas, my true love sent to me",
+            day[d]
+        );
+        send_gift(d);
+    }
+}
+
+fn send_gift(day: usize) {
+    let gift = [
+        "A partridge in a pear tree",
+        "Two turtle doves",
+        "Three french hens",
+        "Four calling birds",
+        "Five golden rings",
+        "Six geese a-laying",
+        "Seven swans a-swimming",
+        "Eight maids a-milking",
+        "Nine ladies dancing",
+        "Ten lords a-leaping",
+        "Eleven pipers piping",
+        "Twelve drummers drumming",
+    ];
+    match day {
+        0 => {
+            println!("{}", gift[0]);
+            println!();
+        }
+        1 => {
+            println!("{}, and", gift[1]);
+            send_gift(day - 1);
+        }
+        _ => {
+            println!("{}", gift[day]);
+            send_gift(day - 1);
+        }
+    }
 }
