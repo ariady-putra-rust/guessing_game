@@ -15,7 +15,34 @@ fn main() {
     // // let THREE_HOURS_IN_SECONDS = 3; // `THREE_HOURS_IN_SECONDS` is interpreted as a constant pattern
     // println!("Three hours in seconds is {THREE_HOURS_IN_SECONDS}");
 
-    let secret_number: u8 = rand::thread_rng().gen_range(1..=100);
+    /* Tuple */
+    // let tup = (1, 2.3, 'a', "ABC", true);
+    // println!("{} {} {} {} {}", tup.0, tup.1, tup.2, tup.3, tup.4); // 1 2.3 'a' "ABC" true
+    // let (_, _, a, _, _) = tup; // destructuring the tuple via pattern-matching
+    // println!("{a}"); // 'a'
+
+    /* Array */
+    // let a: [u8; 3] = [1, 2, 3];
+    // let [_, b, _] = a;
+    // println!("{b}");
+    // let c = [true; 3]; // [true, true, true]
+    // println!("{}", c[1]);
+
+    let secret_numbers: [u8; 5] = [
+        rand::thread_rng().gen_range(1..=100),
+        rand::thread_rng().gen_range(1..=100),
+        rand::thread_rng().gen_range(1..=100),
+        rand::thread_rng().gen_range(1..=100),
+        rand::thread_rng().gen_range(1..=100),
+    ];
+    let mut selection = String::new();
+    print_flush("Please select a secret number [1-5]: ");
+    io::stdin()
+        .read_line(&mut selection)
+        .expect("Failed to read line!");
+    let selection: usize = selection.trim().parse().expect("Please type a number!");
+
+    let secret_number: u8 = secret_numbers[selection - 1]; // rand::thread_rng().gen_range(1..=100);
     println!("Guess the number!"); // {secret_number}");
 
     let mut guess_count = 1;
@@ -35,7 +62,7 @@ fn main() {
         let guess: u8 = match guess.trim().parse() {
             Ok(g) => g,
             Err(_) => {
-                println!("Please type a number!");
+                println!("Please type a number between [1-100]");
                 continue;
             }
         };
