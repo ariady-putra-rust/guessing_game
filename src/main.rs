@@ -5,6 +5,11 @@ use rand::Rng;
 fn main() {
     println!();
 
+    /* Ownership Rules */
+    // 1. Each value in Rust has an owner.
+    // 2. There can only be one owner at a time.
+    // 3. When the owner goes out of scope, the value will be dropped.
+
     /* Variables */
     // let apples = 5; // immutable
     // let mut bananas = 5; // mutable
@@ -63,8 +68,32 @@ fn main() {
     //     println!("the value is: {element}");
     // }
 
+    /* The String Type */
+    // let mut s1 = String::new();
+    // s1.push_str("Lorem ipsum");
+    // println!("1:{s1}");
+    // s1 = String::from("Dolor sit amet");
+    // s1.push_str(", consectetur adipiscing elit");
+    // println!("2:{s1}");
+
+    // /* shallow copy */
+    // let s2 = s1;
+    // // println!("s1:{s1}"); // `s1` is no longer valid here!
+    // println!("s2:{s2}");
+
+    // /* deep copy */
+    // let s3 = s2.clone();
+    // println!("s2:{s2}");
+    // println!("s3:{s3}");
+
+    /* ownership & functions */
+    // ownership_and_functions();
+
+    /* transferring ownership of return values */
+    // transferring_ownership_of_return_values();
+
     /* Exercises */
-    exercise_1();
+    exercise(0);
 
     let secret_numbers: [u8; 5] = [
         rand::thread_rng().gen_range(1..=100),
@@ -138,12 +167,19 @@ fn print_flush(s: &str) {
     io::stdout().flush().expect("Failed to flush!")
 }
 
+fn exercise(e: usize) {
+    match e {
+        1 => exercise_1(),
+        _ => return,
+    }
+}
+
 fn exercise_1() {
-    /* Convert temperatures between Fahrenheit and Celsius. */
+    /* 1. Convert temperatures between Fahrenheit and Celsius. */
     println!("212F = {}C", to_celsius(212.0));
     println!("100C = {}F", to_fahrenheit(100.0));
 
-    /* Generate the nth Fibonacci number. */
+    /* 2. Generate the nth Fibonacci number. */
     println!();
     println!("Fibonacci [0-10]:");
     for n in 0..=10 {
@@ -151,7 +187,7 @@ fn exercise_1() {
     }
     println!();
 
-    /* Print the lyrics to the Christmas carol “The Twelve Days of Christmas,”
+    /* 3. Print the lyrics to the Christmas carol “The Twelve Days of Christmas,”
     taking advantage of the repetition in the song. */
     println!();
     println!("Christmas Carol");
@@ -219,4 +255,63 @@ fn send_gift(day: usize) {
             send_gift(day - 1);
         }
     }
+}
+
+fn ownership_and_functions() {
+    let s = String::from("hello"); // `s` comes into scope
+
+    takes_ownership(s); // `s`'s value moves into the function...
+                        // ... and so is no longer valid here
+
+    let x = 5; // `x` comes into scope
+
+    makes_copy(x); // `x` would move into the function,
+                   // but `u8` is `Copy`, so it's okay to still
+                   // use `x` afterward
+}
+
+fn takes_ownership(some_string: String) {
+    // `some_string` comes into scope
+    println!("{some_string}");
+} // Here, `some_string` goes out of scope and `drop` is called. The backing
+  // memory is freed.
+
+fn makes_copy(some_integer: u8) {
+    // `some_integer` comes into scope
+    println!("{some_integer}");
+} // Here, `some_integer` goes out of scope. Nothing special happens.
+
+fn transferring_ownership_of_return_values() {
+    let s1 = gives_ownership(); // gives_ownership moves its return
+                                // value into s1
+
+    let s2 = String::from("hello"); // s2 comes into scope
+
+    let s3 = takes_and_gives_back(s2); // s2 is moved into
+                                       // takes_and_gives_back, which also
+                                       // moves its return value into s3
+
+    println!("s1:{s1}");
+    // println!("s2:{s2}"); // `s2` is no longer valid here!
+    println!("s3:{s3}");
+}
+
+fn gives_ownership() -> String {
+    // gives_ownership will move its
+    // return value into the function
+    // that calls it
+
+    let some_string = String::from("yours"); // some_string comes into scope
+
+    some_string // some_string is returned and
+                // moves out to the calling
+                // function
+}
+
+// This function takes a String and returns one
+fn takes_and_gives_back(a_string: String) -> String {
+    // a_string comes into
+    // scope
+
+    a_string // a_string is returned and moves out to the calling function
 }
