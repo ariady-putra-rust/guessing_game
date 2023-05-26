@@ -18,9 +18,9 @@ fn main() {
     // let reference_to_nothing = dangle();
 
     /* Borrowing */
+    // borrowing();
     // The opposite of referencing by using `&` is dereferencing,
     // which is accomplished with the dereference operator `*`
-    // borrowing();
 
     /* Variables */
     // let apples = 5; // immutable
@@ -46,6 +46,11 @@ fn main() {
     // println!("{b}");
     // let c = [true; 3]; // [true, true, true]
     // println!("{}", c[1]);
+
+    /* Array Slices */
+    // let a = [1, 2, 3, 4, 5];
+    // let slice = &a[1..3];
+    // assert_eq!(slice, &[2, 3]);
 
     /* Loop label */
     // let mut count = 0;
@@ -87,6 +92,46 @@ fn main() {
     // s1 = String::from("Dolor sit amet");
     // s1.push_str(", consectetur adipiscing elit");
     // println!("2:{s1}");
+
+    /* String Slices */
+    // let s = String::from("hello world");
+    // let hello: &str = &s[0..5];
+    // let world: &str = &s[6..11];
+    // println!("{hello} {world}");
+    /*
+    With Rust's `..` range syntax,
+    if you want to start at index [0],
+    you can drop the value before the two periods.
+    In other words,
+    these are equal:
+    */
+    // let s = String::from("hello");
+    // let slice: &str = &s[0..2];
+    // let slice: &str = &s[..2];
+    /*
+    By the same token,
+    if your slice includes the last byte of the String,
+    you can drop the trailing number.
+    That means these are equal:
+    */
+    // let s = String::from("hello");
+    // let len = s.len();
+    // let slice: &str = &s[3..len];
+    // let slice: &str = &s[3..];
+    /*
+    You can also drop both values to take a slice of the entire string.
+    So these are equal:
+    */
+    // let s = String::from("hello");
+    // let len = s.len();
+    // let slice: &str = &s[0..len];
+    // let slice: &str = &s[..];
+    /*
+    NOTE:
+    String slice range indices must occur at valid UTF-8 character boundaries.
+    If you attempt to create a string slice in the middle of a multibyte character,
+    your program will exit with an error.
+    */
 
     // /* shallow copy */
     // let s2 = s1;
@@ -182,6 +227,7 @@ fn print_flush(s: &str) {
 fn exercise(e: usize) {
     match e {
         1 => exercise_1(),
+        2 => exercise_2(),
         _ => return,
     }
 }
@@ -397,3 +443,35 @@ fn change(some_string: &mut String) {
 //     &s // we return a reference to the String `s`
 // } // Here `s` goes out of scope and is dropped. Its memory goes away.
 //   // Danger!
+
+fn exercise_2() {
+    /* write a function that takes a string of words separated by spaces and returns the first word it finds in that string */
+    // If the function doesn’t find a space in the string,
+    // the whole string must be one word,
+    // so the entire string should be returned.
+    let mut sentence = String::from("The quick brown fox jumps over the lazy dog.");
+    println!("{sentence}");
+    let first_word = first_word(&sentence);
+    let last_word = last_word(&sentence);
+    sentence.clear();
+    println!("{sentence}");
+    println!("{} {}", first_word, last_word);
+}
+
+fn first_word(sentence: &String) -> String {
+    nth_word(0, sentence)
+}
+
+fn last_word(sentence: &String) -> String {
+    nth_back_word(0, sentence)
+}
+
+fn nth_word(n: usize, sentence: &String) -> String {
+    let mut words = sentence.split_whitespace();
+    return String::from(words.nth(n).unwrap_or(""));
+}
+
+fn nth_back_word(n: usize, sentence: &String) -> String {
+    let mut words = sentence.split_whitespace();
+    return String::from(words.nth_back(n).unwrap_or(""));
+}
