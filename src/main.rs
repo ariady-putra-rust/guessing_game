@@ -257,12 +257,12 @@ fn main() {
     your program will exit with an error.
     */
 
-    // /* shallow copy */
+    /* shallow copy */
     // let s2 = s1;
     // // println!("s1:{s1}"); // `s1` is no longer valid here!
     // println!("s2:{s2}");
 
-    // /* deep copy */
+    /* deep copy */
     // let s3 = s2.clone();
     // println!("s2:{s2}");
     // println!("s3:{s3}");
