@@ -209,6 +209,21 @@ fn main() {
     //     println!("the value is: {element}");
     // }
 
+    /* if-let(-else) */
+    // let day = Day::Zero;
+    // if let Day::Zero = day {
+    //     println!("Invalid Day");
+    // }
+    // // else {}
+    // /*
+    // is equivalent to:
+    // */
+    // let day = Day::Zero;
+    // match day {
+    //     Day::Zero => println!("Invalid Day"),
+    //     _ => (),
+    // }
+
     /* The String Type */
     // let mut s1 = String::new();
     // s1.push_str("Lorem ipsum");
