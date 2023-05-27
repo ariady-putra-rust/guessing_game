@@ -435,15 +435,63 @@ fn fibonacci(n: u8) -> u16 {
     }
 }
 
+enum Day {
+    Zero,
+    First,
+    Second,
+    Third,
+    Fourth,
+    Fifth,
+    Sixth,
+    Seventh,
+    Eighth,
+    Ninth,
+    Tenth,
+    Eleventh,
+    Twelfth,
+}
+impl Day {
+    pub fn to_string(&self) -> String {
+        String::from(match self {
+            Self::Zero => "zero",
+            Self::First => "first",
+            Self::Second => "second",
+            Self::Third => "third",
+            Self::Fourth => "fourth",
+            Self::Fifth => "fifth",
+            Self::Sixth => "sixth",
+            Self::Seventh => "seventh",
+            Self::Eighth => "eighth",
+            Self::Ninth => "ninth",
+            Self::Tenth => "tenth",
+            Self::Eleventh => "eleventh",
+            Self::Twelfth => "twelfth",
+        })
+    }
+
+    pub fn from_usize(u: usize) -> Self {
+        match u {
+            1 => Self::First,
+            2 => Self::Second,
+            3 => Self::Third,
+            4 => Self::Fourth,
+            5 => Self::Fifth,
+            6 => Self::Sixth,
+            7 => Self::Seventh,
+            8 => Self::Eighth,
+            9 => Self::Ninth,
+            10 => Self::Tenth,
+            11 => Self::Eleventh,
+            12 => Self::Twelfth,
+            _ => Self::Zero,
+        }
+    }
+}
 fn sing_christmas_carol() {
-    let day = [
-        "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth",
-        "tenth", "eleventh", "twelfth",
-    ];
-    for d in 0..12 {
+    for d in 1..=12 {
         println!(
             "On the {} day of Christmas, my true love sent to me",
-            day[d]
+            Day::from_usize(d).to_string()
         );
         send_gift(d);
     }
@@ -465,16 +513,16 @@ fn send_gift(day: usize) {
         "Twelve drummers drumming",
     ];
     match day {
-        0 => {
+        1 => {
             println!("{}", gift[0]);
             println!();
         }
-        1 => {
+        2 => {
             println!("{}, and", gift[1]);
             send_gift(day - 1);
         }
         _ => {
-            println!("{}", gift[day]);
+            println!("{}", gift[day - 1]);
             send_gift(day - 1);
         }
     }
