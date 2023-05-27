@@ -1,3 +1,6 @@
+use crate::exercises::exercise;
+use guessing_game_lib::play_game;
+
 pub mod borrowing;
 pub mod controls;
 pub mod copies;
@@ -22,7 +25,7 @@ fn main() {
     // 2. References must always be valid.
 
     /* Exercises */
-    exercises::exercise(0);
+    exercise(0);
 
-    guessing_game_lib::play_game();
+    play_game();
 }
