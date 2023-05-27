@@ -1,5 +1,3 @@
-// cargo new guessing_game
-
 pub mod borrowing;
 pub mod controls;
 pub mod copies;

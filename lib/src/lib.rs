@@ -1,4 +1,4 @@
-// cargo new guessing_game_lib --lib
+// cargo new lib --lib
 
 use crate::libutil::print_flush;
 use rand::Rng;
