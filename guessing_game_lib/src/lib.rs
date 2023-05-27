@@ -1,6 +1,10 @@
-use crate::util::print_flush;
+// cargo new guessing_game_lib --lib
+
+use crate::libutil::print_flush;
 use rand::Rng;
 use std::io;
+
+pub mod libutil;
 
 #[derive(Debug)]
 pub struct Game {

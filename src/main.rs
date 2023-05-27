@@ -1,7 +1,4 @@
-use crate::game::play_game;
-
-pub mod game;
-pub mod util;
+// cargo new guessing_game
 
 pub mod borrowing;
 pub mod controls;
@@ -29,5 +26,5 @@ fn main() {
     /* Exercises */
     exercises::exercise(0);
 
-    play_game();
+    guessing_game_lib::play_game();
 }
