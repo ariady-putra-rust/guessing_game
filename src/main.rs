@@ -2,6 +2,7 @@ use crate::exercises::exercise;
 use guessing_game_lib::play_game;
 
 pub mod borrowing;
+pub mod collection;
 pub mod controls;
 pub mod copies;
 pub mod dangling_references;
