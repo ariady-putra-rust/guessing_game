@@ -299,10 +299,9 @@ fn starts_with_consonant(word: &String) -> bool {
 }
 
 fn starts_with_any(any: &String, word: &String) -> bool {
-    if let Some(letter) = String::from(word).chars().next() {
-        any.contains(letter)
-    } else {
-        false
+    match word.chars().next() {
+        Some(letter) => any.contains(letter),
+        None => false,
     }
 }
 
