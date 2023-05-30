@@ -261,10 +261,11 @@ fn to_pig_latin(sentence: &String) -> String {
 
 fn process_word(word: &mut String) -> String {
     if starts_with_consonant(word) {
+        let word_length = word.len();
         if let Some(letter) = word.chars().next() {
-            let a = min(word.len(), 1);
+            let a = min(1, word_length);
             *word = if letter.is_uppercase() {
-                let b = min(word.len(), 2);
+                let b = min(2, word_length);
                 format!(
                     "{}{}-{}ay",
                     &word[a..b].to_uppercase(),
