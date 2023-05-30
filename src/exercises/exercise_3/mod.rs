@@ -1,12 +1,11 @@
-use std::{cmp::min, collections::BTreeMap, io};
-
 use guessing_game_lib::libutil::print_flush;
+use std::{cmp::min, collections::BTreeMap, io};
 
 pub fn exercise_3() {
     // 1. Given a list of integers, use a vector and return the median
     // (when sorted, the value in the middle position) and mode
     // (the value that occurs most often; a hash map will be helpful here) of the list.
-    let integer_list = vec![5, 1, 2, 3, 3, 4, 6, 6, 7, 8, 8, 9];
+    let integer_list = vec![8, 9, 5, 1, 2, 3, 4, 6, 7, 8, 9, 1]; // [1,1,2,3,4,5,6,7,8,8,9,9]
     let median = median(&integer_list);
     println!(
         "Median: {}",
@@ -210,23 +209,22 @@ fn mode<T: Copy + Ord>(list: &Vec<T>) -> Option<T> {
         0 => None,
         1 => list.first().copied(),
         _ => {
-            let mut list = list.clone();
-            list.sort();
-
             let mut map = BTreeMap::new();
-            let mut most = 0;
-            let mut val = None;
-            for t in list {
+            let mut max = 0;
+            for &t in list {
                 let count = map.entry(t).or_insert(0);
                 *count += 1;
 
-                if *count > most {
-                    most = *count;
-                    val = Some(t);
+                if *count > max {
+                    max = *count;
                 }
             }
 
-            return val;
+            return median(
+                &map.iter()
+                    .filter_map(|(&t, &count)| if count == max { Some(t) } else { None })
+                    .collect(),
+            );
         }
     }
 }
