@@ -6,10 +6,7 @@ pub fn exercise_3() {
     // 1. Given a list of integers, use a vector and return the median
     // (when sorted, the value in the middle position) and mode
     // (the value that occurs most often; a hash map will be helpful here) of the list.
-    let integer_list = vec![
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5,
-        6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8, 8, 8, 9, 9, 9, 9, 9, 9,
-    ];
+    let integer_list = vec![5, 1, 2, 3, 3, 4, 6, 6, 7, 8, 8, 9];
     let median = median(&integer_list);
     println!(
         "Median: {}",
@@ -196,38 +193,42 @@ pub fn exercise_3() {
 }
 
 fn median<T: Copy + Ord>(list: &Vec<T>) -> Option<T> {
-    if list.len() == 0 {
-        return None;
+    match list.len() {
+        0 => None,
+        1 => list.first().copied(),
+        _ => {
+            let mut list = list.clone();
+            list.sort();
+
+            return list.get((list.len() - 1) / 2).copied();
+        }
     }
-
-    let mut list = list.clone();
-    list.sort();
-
-    return list.get(list.len() / 2 - 1).copied();
 }
 
 fn mode<T: Copy + Ord>(list: &Vec<T>) -> Option<T> {
-    if list.len() == 0 {
-        return None;
-    }
+    match list.len() {
+        0 => None,
+        1 => list.first().copied(),
+        _ => {
+            let mut list = list.clone();
+            list.sort();
 
-    let mut list = list.clone();
-    list.sort();
+            let mut map = BTreeMap::new();
+            let mut most = 0;
+            let mut val = None;
+            for t in list {
+                let count = map.entry(t).or_insert(0);
+                *count += 1;
 
-    let mut map = BTreeMap::new();
-    let mut most = 0;
-    let mut val = None;
-    for t in list {
-        let count = map.entry(t).or_insert(0);
-        *count += 1;
+                if *count > most {
+                    most = *count;
+                    val = Some(t);
+                }
+            }
 
-        if *count > most {
-            most = *count;
-            val = Some(t);
+            return val;
         }
     }
-
-    return val;
 }
 
 fn to_pig_latin(sentence: &String) -> String {
