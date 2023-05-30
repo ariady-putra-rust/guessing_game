@@ -203,7 +203,7 @@ fn median<T: Copy + Ord>(list: &Vec<T>) -> Option<T> {
     let mut list = list.clone();
     list.sort();
 
-    return Some(list.get(list.len() / 2 - 1).copied().unwrap());
+    return list.get(list.len() / 2 - 1).copied();
 }
 
 fn mode<T: Copy + Ord>(list: &Vec<T>) -> Option<T> {
@@ -216,18 +216,18 @@ fn mode<T: Copy + Ord>(list: &Vec<T>) -> Option<T> {
 
     let mut map = BTreeMap::new();
     let mut most = 0;
-    let mut val = list[0];
+    let mut val = None;
     for t in list {
         let count = map.entry(t).or_insert(0);
         *count += 1;
 
         if *count > most {
             most = *count;
-            val = t;
+            val = Some(t);
         }
     }
 
-    return Some(val);
+    return val;
 }
 
 fn to_pig_latin(sentence: &String) -> String {
