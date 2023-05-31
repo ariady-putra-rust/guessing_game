@@ -7,14 +7,20 @@ pub mod controls;
 pub mod copies;
 pub mod dangling_references;
 pub mod error_handling;
+pub mod generics;
+pub mod lifetimes;
 pub mod loops;
 pub mod ownership;
 pub mod strings;
 pub mod structs;
+pub mod traits;
 pub mod variables;
 
 pub mod exercises;
 pub mod tests;
+
+pub mod integration_test;
+pub mod unit_test;
 
 // fn read_only(&self) {..} // borrowing
 // fn mutate(&mut self) {..} // pass by reference
