@@ -45,11 +45,21 @@ fn read_file(file_path: &str) -> Result<()> {
         //     println!("{text}");
         // }
 
-        /* file_access::read_string(&FilePath) */
+        /* file_access::read_string(&FilePath) with FilePath::access(&str) */
         // {
-        //     let path = FilePath::access(&file_path);
+        //     let path_str = file_path;
+        //     let path = FilePath::access(&path_str);
         //     let text = file_access::read_string(&path)?;
-        //     println!("{file_path}");
+        //     println!("{path_str}");
+        //     println!("{text}");
+        // }
+
+        /* file_access::read_string(&FilePath) with FilePath::access(&String) */
+        // {
+        //     let path_string = String::from(file_path);
+        //     let path = FilePath::access(&path_string);
+        //     let text = file_access::read_string(&path)?;
+        //     println!("{path_string}");
         //     println!("{text}");
         // }
 
