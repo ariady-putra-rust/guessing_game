@@ -10,17 +10,23 @@ pub struct FilePath {
 }
 
 impl FilePath {
-    pub fn from_string(file_path: &String) -> Self {
+    pub fn access<T: Into<String>>(file_path: T) -> Self {
         Self {
-            get_path: file_path.to_string(),
+            get_path: file_path.into(),
         }
     }
 
-    pub fn from_str(file_path: &str) -> Self {
-        Self {
-            get_path: file_path.to_string(),
-        }
-    }
+    // pub fn from_string(file_path: &String) -> Self {
+    //     Self {
+    //         get_path: file_path.to_string(),
+    //     }
+    // }
+
+    // pub fn from_str(file_path: &str) -> Self {
+    //     Self {
+    //         get_path: file_path.to_string(),
+    //     }
+    // }
 
     pub fn get_full_path(&self) -> Result<String> {
         Ok(canonicalize(&self.get_path)?.display().to_string())
