@@ -10,23 +10,11 @@ pub struct FilePath {
 }
 
 impl FilePath {
-    pub fn access<T: Into<String>>(file_path: T) -> Self {
+    pub fn access<T: AsRef<str>>(file_path: &T) -> Self {
         Self {
-            get_path: file_path.into(),
+            get_path: file_path.as_ref().to_string(),
         }
     }
-
-    // pub fn from_string(file_path: &String) -> Self {
-    //     Self {
-    //         get_path: file_path.to_string(),
-    //     }
-    // }
-
-    // pub fn from_str(file_path: &str) -> Self {
-    //     Self {
-    //         get_path: file_path.to_string(),
-    //     }
-    // }
 
     pub fn get_full_path(&self) -> Result<String> {
         Ok(canonicalize(&self.get_path)?.display().to_string())
@@ -55,12 +43,18 @@ impl FilePath {
     }
 }
 
-fn get_file(file_path: &FilePath) -> Result<File> {
-    File::open(&file_path.get_path)
+impl AsRef<str> for FilePath {
+    fn as_ref(&self) -> &str {
+        self.get_path.as_str()
+    }
+}
+
+fn get_file<T: AsRef<str>>(file_path: &T) -> Result<File> {
+    File::open(&file_path.as_ref())
 }
 
 type Text = String;
-pub fn read_string(file_path: &FilePath) -> Result<Text> {
+pub fn read_string<T: AsRef<str>>(file_path: &T) -> Result<Text> {
     let mut buf = String::new();
     get_file(&file_path)?.read_to_string(&mut buf)?;
 
@@ -69,13 +63,13 @@ pub fn read_string(file_path: &FilePath) -> Result<Text> {
 
 type Line = String;
 type Lines = Vec<Line>;
-pub fn read_lines(file_path: &FilePath) -> Result<Lines> {
+pub fn read_lines<T: AsRef<str>>(file_path: &T) -> Result<Lines> {
     Ok(read_string(file_path)?
         .lines()
         .map(|line| line.to_string())
         .collect())
 }
 
-pub fn get_metadata(file_path: &FilePath) -> Result<Metadata> {
+pub fn get_metadata<T: AsRef<str>>(file_path: &T) -> Result<Metadata> {
     get_file(&file_path)?.metadata()
 }

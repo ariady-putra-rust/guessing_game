@@ -29,20 +29,62 @@ pub fn run(test: usize) {
 
 fn read_file(file_path: &str) -> Result<()> {
     Ok({
-        let file_path = FilePath::access(file_path);
-        let file = file_access::read_string(&file_path)?;
-        println!("{}:", file_path.get_full_path()?);
-        println!("{file}");
+        /* file_access::read_string(&str) */
+        // {
+        //     let path_str = file_path;
+        //     let text = file_access::read_string(&path_str)?;
+        //     println!("{path_str}");
+        //     println!("{text}");
+        // }
+
+        /* file_access::read_string(&String) */
+        // {
+        //     let path_string = String::from(file_path);
+        //     let text = file_access::read_string(&path_string)?;
+        //     println!("{path_string}");
+        //     println!("{text}");
+        // }
+
+        /* file_access::read_string(&FilePath) */
+        // {
+        //     let path = FilePath::access(&file_path);
+        //     let text = file_access::read_string(&path)?;
+        //     println!("{file_path}");
+        //     println!("{text}");
+        // }
+
+        /* FilePath::access(&str).read_string() */
+        // {
+        //     let path_str = file_path;
+        //     let file = FilePath::access(&path_str);
+        //     let text = file.read_string()?;
+        //     println!("{path_str}");
+        //     println!("{text}");
+        // }
+
+        /* FilePath::access(&String).read_string() */
+        // {
+        //     let path_string = String::from(file_path);
+        //     let file = FilePath::access(&path_string);
+        //     let text = file.read_string()?;
+        //     println!("{path_string}");
+        //     println!("{text}");
+        // }
+
+        let file = FilePath::access(&file_path);
+        let text = file_access::read_string(&file)?;
+        println!("{}:", file.get_full_path()?);
+        println!("{text}");
     })
 }
 
 fn pretty_print_with_line_numbers() -> Result<()> {
     Ok({
-        let file = FilePath::access("Cargo.toml");
+        let file = FilePath::access(&"Cargo.toml");
         let lines = file.read_lines()?;
         let len = lines.len();
         let w = len.to_string().len();
-        println!("{}:", file.get_full_path()?);
+        println!("{}", file.get_full_path()?);
         for line in 0..len {
             // println!("{:w$}: {line}", line_number, w = 5, line = "str");
             println!("{:w$}: {line}", line + 1, w = w, line = lines[line]);
@@ -56,7 +98,7 @@ fn test_error() -> Result<()> {
 
 fn file_metadata() -> Result<()> {
     Ok({
-        let file = FilePath::access("Cargo.toml");
+        let file = FilePath::access(&"Cargo.toml");
         let metadata = file.get_metadata()?;
         println!("{}", file.get_full_path()?);
         println!("{:#?}", metadata);
