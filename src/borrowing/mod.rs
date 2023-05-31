@@ -49,7 +49,7 @@ pub fn borrowing() {
     // r1.push_str(", world");
     // println!("{r1}, {r2}");
     /*
-    multiple immutable references are allowed because no one who is just reading the data has the ability to affect anyone else’s reading of the data
+    multiple immutable references are allowed because no one who is just reading the data has the ability to affect anyone else's reading of the data
     */
 }
 
