@@ -50,7 +50,7 @@ fn read_file(file_path: &str) -> Result<()> {
         //     let path_str = file_path;
         //     let path = FilePath::access(&path_str);
         //     let text = file_access::read_string(&path)?;
-        //     println!("{path_str}");
+        //     println!("{}", path.get_full_path()?);
         //     println!("{text}");
         // }
 
@@ -59,7 +59,7 @@ fn read_file(file_path: &str) -> Result<()> {
         //     let path_string = String::from(file_path);
         //     let path = FilePath::access(&path_string);
         //     let text = file_access::read_string(&path)?;
-        //     println!("{path_string}");
+        //     println!("{}", path.get_full_path()?);
         //     println!("{text}");
         // }
 
