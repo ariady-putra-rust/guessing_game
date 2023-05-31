@@ -1,6 +1,5 @@
-use crate::structs::XYZ;
-
 use super::{Printable, Show};
+use crate::structs::XYZ;
 
 impl Show for usize {
     fn show(&self) -> String {
