@@ -117,10 +117,11 @@ pub fn write_string<Path: AsRef<str>, Text: AsRef<str>>(
     file_path: &Path,
     text: &Text,
 ) -> Result<()> {
-    if !path_of(file_path).exists() {
+    let path = path_of(file_path);
+    if !path.exists() {
         mk_file(file_path)?;
     }
-    return fs::write(path_of(file_path), text.as_ref());
+    return fs::write(path, text.as_ref());
 }
 
 pub fn write_lines<Path: AsRef<str>, Line: AsRef<str>>(
