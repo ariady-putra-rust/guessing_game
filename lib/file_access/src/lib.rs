@@ -61,11 +61,11 @@ impl FilePath {
         delete(self)
     }
 
-    pub fn copy_to(&self, to: &impl AsRef<str>) -> Result<()> {
+    pub fn copy_to<Path: AsRef<str>>(&self, to: &Path) -> Result<()> {
         copy(self, to)
     }
 
-    pub fn rename_to(&self, to: &impl AsRef<str>) -> Result<()> {
+    pub fn rename_to<Path: AsRef<str>>(&self, to: &Path) -> Result<()> {
         rename(self, to)
     }
 
