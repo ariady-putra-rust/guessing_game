@@ -24,7 +24,7 @@ impl FilePath {
     }
 
     pub fn get_relative_path(&self) -> Result<String> {
-        match PathBuf::from(&self.get_full_path()?).strip_prefix(&current_dir()?) {
+        match path_of(&self.get_full_path()?).strip_prefix(&current_dir()?) {
             Ok(p) => match p.to_str() {
                 Some(s) => Ok(s.to_string()),
                 None => Err(Error::new(ErrorKind::InvalidData, "&Path.to_str() error")),
