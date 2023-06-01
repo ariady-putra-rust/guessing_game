@@ -41,19 +41,19 @@ impl FilePath {
         read_lines(self)
     }
 
-    pub fn write_string(&self, text: &Text) -> Result<()> {
+    pub fn write_string<Text: AsRef<str>>(&self, text: &Text) -> Result<()> {
         write_string(self, text)
     }
 
-    pub fn write_lines(&self, lines: &Lines) -> Result<()> {
+    pub fn write_lines<Line: AsRef<str>>(&self, lines: &Vec<Line>) -> Result<()> {
         write_lines(self, lines)
     }
 
-    pub fn append_string(&self, text: &Text) -> Result<()> {
+    pub fn append_string<Text: AsRef<str>>(&self, text: &Text) -> Result<()> {
         append_string(self, text)
     }
 
-    pub fn append_lines(&self, lines: &Lines) -> Result<()> {
+    pub fn append_lines<Line: AsRef<str>>(&self, lines: &Vec<Line>) -> Result<()> {
         append_lines(self, lines)
     }
 
@@ -223,7 +223,7 @@ mod tests {
         Ok({
             // Arrange
             let file = FilePath::access(&"write_string.txt");
-            let text = String::from("Hello, World!");
+            let text = "Hello, World!";
 
             // Action
             file.write_string(&text)?;
@@ -262,7 +262,7 @@ mod tests {
         Ok({
             // Arrange
             let file = FilePath::access(&"append_string.txt");
-            let text = String::from("Hello, World!");
+            let text = "Hello, World!";
             file.write_string(&text)?;
 
             // Action
@@ -281,15 +281,15 @@ mod tests {
         Ok({
             // Arrange
             let file = FilePath::access(&"append_lines.txt");
-            let lines1 = vec!["1", "2"].to_vec_string();
+            let lines1 = vec!["1", "2"]; // .to_vec_string();
             file.write_lines(&lines1)?;
 
             // Action
-            let lines2 = vec!["3", "4"].to_vec_string();
+            let lines2 = vec!["3", "4"]; //.to_vec_string();
             file.append_lines(&lines2)?;
 
             // Assert
-            assert_eq!(file.read_lines()?, vec!["1", "2", "3", "4"].to_vec_string());
+            assert_eq!(file.read_lines()?, vec!["1", "2", "3", "4"]); // .to_vec_string());
 
             // Clean-up
             file.delete()?;
@@ -319,7 +319,7 @@ mod tests {
             let from = "copy_from.txt";
             let to = "copy_to.txt";
             let file = FilePath::access(&from);
-            file.write_string(&String::from("Hello, World!"))?;
+            file.write_string(&"Hello, World!")?;
 
             // Action
             file.copy_to(&to)?;
@@ -343,7 +343,7 @@ mod tests {
             // Arrange
             let from = "rename_from.txt";
             let to = "rename_to.txt";
-            let text = String::from("Hello, World!");
+            let text = "Hello, World!";
             let file = FilePath::access(&from);
             file.write_string(&text)?;
 
