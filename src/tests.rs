@@ -3,7 +3,7 @@ use crate::{
     structs::XYZ,
     traits::{Printable, Show},
 };
-use file_access::FilePath;
+use file_access::{as_file::*, *};
 use std::{fs, io::Result};
 
 pub fn run(test: usize) {
@@ -119,6 +119,10 @@ fn shortest_way_to_read_a_file() -> Result<()> {
     Ok({
         let file = fs::read_to_string("Cargo.toml")?;
         println!("{file}");
+
+        // even shorter when using my custom AsFile trait
+        let text = "Cargo.toml".as_file().read_string()?;
+        println!("{text}");
     })
 }
 
