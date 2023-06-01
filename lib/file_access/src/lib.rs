@@ -6,6 +6,7 @@ use std::{
 };
 use traits::to_vec_string::*;
 
+pub mod as_file;
 mod traits;
 
 pub struct FilePath {
