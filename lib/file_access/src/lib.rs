@@ -13,7 +13,7 @@ pub struct FilePath {
 }
 
 impl FilePath {
-    pub fn access<T: AsRef<str>>(file_path: &T) -> Self {
+    pub fn access<Path: AsRef<str>>(file_path: &Path) -> Self {
         Self {
             get_path: file_path.as_ref().to_string(),
         }
