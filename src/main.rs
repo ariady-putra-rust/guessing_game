@@ -19,9 +19,6 @@ pub mod variables;
 pub mod exercises;
 pub mod tests;
 
-pub mod integration_test;
-pub mod unit_test;
-
 // fn read_only(&self) {..} // borrowing
 // fn mutate(&mut self) {..} // pass by reference
 // fn consume(self) {..} // take ownership
