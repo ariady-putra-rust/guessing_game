@@ -6,8 +6,8 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-guessing_game_lib = { path = "lib/guessing_game" }
-file_access = { path = "lib/file_access" }
+file_access = { git = "https://github.com/ariady-putra/file_access.git", tag = "0.1.0", version = "0.1.0" }
+guessing_game_lib = { version = "0.1.0", path = "lib/guessing_game" }
 
 # Unwinding the Stack or Aborting in Response to a Panic
 # 
