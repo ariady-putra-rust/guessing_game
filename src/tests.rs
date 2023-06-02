@@ -3,7 +3,7 @@ use crate::{
     structs::XYZ,
     traits::{Printable, Show},
 };
-use file_access::{as_file::*, *};
+use file_access::{as_file::*, file_path::*};
 use std::{fs, io::Result};
 
 pub fn run(test: usize) {
@@ -13,7 +13,7 @@ pub fn run(test: usize) {
         2 => pretty_print_with_line_numbers(),
         3 => test_error(), // file doesn't exist
         4 => file_metadata(),
-        5 => shortest_way_to_read_a_file(),
+        5 => fs_read_to_string(),
 
         // Generics, Traits & Lifetimes
         6 => generic(),
@@ -29,68 +29,21 @@ pub fn run(test: usize) {
 
 fn read_file(file_path: &str) -> Result<()> {
     Ok({
-        /* file_access::read_string(&str) */
-        // {
-        //     let path_str = file_path;
-        //     let text = file_access::read_string(&path_str)?;
-        //     println!("{path_str}");
-        //     println!("{text}");
-        // }
-
-        /* file_access::read_string(&String) */
-        // {
-        //     let path_string = String::from(file_path);
-        //     let text = file_access::read_string(&path_string)?;
-        //     println!("{path_string}");
-        //     println!("{text}");
-        // }
-
-        /* file_access::read_string(&FilePath) with FilePath::access(&str) */
-        // {
-        //     let path_str = file_path;
-        //     let path = FilePath::access(&path_str);
-        //     let text = file_access::read_string(&path)?;
-        //     println!("{}", path.get_full_path()?);
-        //     println!("{text}");
-        // }
-
-        /* file_access::read_string(&FilePath) with FilePath::access(&String) */
-        // {
-        //     let path_string = String::from(file_path);
-        //     let path = FilePath::access(&path_string);
-        //     let text = file_access::read_string(&path)?;
-        //     println!("{}", path.get_full_path()?);
-        //     println!("{text}");
-        // }
-
-        /* FilePath::access(&str).read_string() */
-        // {
-        //     let path_str = file_path;
-        //     let file = FilePath::access(&path_str);
-        //     let text = file.read_string()?;
-        //     println!("{path_str}");
-        //     println!("{text}");
-        // }
-
-        /* FilePath::access(&String).read_string() */
-        // {
-        //     let path_string = String::from(file_path);
-        //     let file = FilePath::access(&path_string);
-        //     let text = file.read_string()?;
-        //     println!("{path_string}");
-        //     println!("{text}");
-        // }
+        let text = file_access::read_string(&file_path)?;
+        println!("{text}");
 
         let file = FilePath::access(&file_path);
-        let text = file_access::read_string(&file)?;
-        println!("{}:", file.get_full_path()?);
+        let text = file.read_string()?;
+        println!("{text}");
+
+        let text = file_path.as_file().read_string()?;
         println!("{text}");
     })
 }
 
 fn pretty_print_with_line_numbers() -> Result<()> {
     Ok({
-        let file = FilePath::access(&"Cargo.toml");
+        let file = "Cargo.toml".as_file();
         let lines = file.read_lines()?;
         let len = lines.len();
         let w = len.to_string().len();
@@ -108,21 +61,17 @@ fn test_error() -> Result<()> {
 
 fn file_metadata() -> Result<()> {
     Ok({
-        let file = FilePath::access(&"Cargo.toml");
+        let file = "Cargo.toml".as_file();
         let metadata = file.get_metadata()?;
         println!("{}", file.get_full_path()?);
         println!("{:#?}", metadata);
     })
 }
 
-fn shortest_way_to_read_a_file() -> Result<()> {
+fn fs_read_to_string() -> Result<()> {
     Ok({
         let file = fs::read_to_string("Cargo.toml")?;
         println!("{file}");
-
-        // even shorter when using my custom AsFile trait
-        let text = "Cargo.toml".as_file().read_string()?;
-        println!("{text}");
     })
 }
 

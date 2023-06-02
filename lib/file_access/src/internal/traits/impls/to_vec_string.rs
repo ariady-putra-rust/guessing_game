@@ -1,7 +1,7 @@
-use crate::{traits::to_vec_string::*, *};
+use crate::internal::traits::to_vec_string::*;
 
 impl<Line: AsRef<str>> ToVecString for Vec<Line> {
-    fn to_vec_string(&self) -> Vec<Text> {
+    fn to_vec_string(&self) -> Vec<String> {
         self.iter().map(|line| line.as_ref().to_string()).collect()
     }
 }
@@ -9,7 +9,10 @@ impl<Line: AsRef<str>> ToVecString for Vec<Line> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::any::{Any, TypeId};
+    use std::{
+        any::{Any, TypeId},
+        io::Result,
+    };
 
     fn is_vec_string(a: &dyn Any) -> bool {
         a.type_id() == TypeId::of::<Vec<String>>()

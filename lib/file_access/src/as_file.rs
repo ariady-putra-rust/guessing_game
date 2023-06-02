@@ -1,4 +1,4 @@
-use crate::*;
+use crate::file_path::*;
 
 pub trait AsFile {
     fn as_file(&self) -> FilePath;
@@ -13,6 +13,7 @@ impl<Path: AsRef<str>> AsFile for Path {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::io::Result;
 
     #[test]
     fn str_as_file() -> Result<()> {
@@ -26,7 +27,7 @@ mod tests {
     fn string_as_file() -> Result<()> {
         Ok({
             // Arrange
-            let lines = vec!["hello", "world"].to_vec_string();
+            let lines = vec!["hello", "world"]; // .to_vec_string();
 
             // Action
             let file = "from_string.txt".to_string().as_file();

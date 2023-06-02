@@ -1,92 +1,19 @@
+use internal::{traits::to_vec_string::*, types::*};
 use std::{
-    env::current_dir,
-    fs::{self, canonicalize, File, Metadata},
+    fs::{self, File, Metadata},
     io::{Error, ErrorKind, Read, Result},
     path::PathBuf,
 };
-use traits::to_vec_string::*;
 
 pub mod as_file;
-mod traits;
-
-pub struct FilePath {
-    get_path: String,
-}
-
-impl FilePath {
-    pub fn access<Path: AsRef<str>>(file_path: &Path) -> Self {
-        Self {
-            get_path: file_path.as_ref().to_string(),
-        }
-    }
-
-    pub fn get_full_path(&self) -> Result<String> {
-        Ok(canonicalize(&self.get_path)?.display().to_string())
-    }
-
-    pub fn get_relative_path(&self) -> Result<String> {
-        match path_of(&self.get_full_path()?).strip_prefix(&current_dir()?) {
-            Ok(p) => match p.to_str() {
-                Some(s) => Ok(s.to_string()),
-                None => Err(Error::new(ErrorKind::InvalidData, "&Path.to_str() error")),
-            },
-            Err(x) => Err(Error::new(ErrorKind::InvalidInput, x)),
-        }
-    }
-
-    pub fn read_string(&self) -> Result<Text> {
-        read_string(self)
-    }
-
-    pub fn read_lines(&self) -> Result<Lines> {
-        read_lines(self)
-    }
-
-    pub fn write_string<Text: AsRef<str>>(&self, text: &Text) -> Result<()> {
-        write_string(self, text)
-    }
-
-    pub fn write_lines<Line: AsRef<str>>(&self, lines: &Vec<Line>) -> Result<()> {
-        write_lines(self, lines)
-    }
-
-    pub fn append_string<Text: AsRef<str>>(&self, text: &Text) -> Result<()> {
-        append_string(self, text)
-    }
-
-    pub fn append_lines<Line: AsRef<str>>(&self, lines: &Vec<Line>) -> Result<()> {
-        append_lines(self, lines)
-    }
-
-    pub fn delete(&self) -> Result<()> {
-        delete(self)
-    }
-
-    pub fn copy_to<Path: AsRef<str>>(&self, to: &Path) -> Result<()> {
-        copy(self, to)
-    }
-
-    pub fn rename_to<Path: AsRef<str>>(&self, to: &Path) -> Result<()> {
-        rename(self, to)
-    }
-
-    pub fn get_metadata(&self) -> Result<Metadata> {
-        get_metadata(self)
-    }
-}
-
-impl AsRef<str> for FilePath {
-    fn as_ref(&self) -> &str {
-        self.get_path.as_str()
-    }
-}
+pub mod file_path;
+mod internal;
 
 fn get_file(file_path: &impl AsRef<str>) -> Result<File> {
     File::open(file_path.as_ref())
 }
 
-type Path = PathBuf;
-fn path_of(file_path: &impl AsRef<str>) -> Path {
+fn path_of(file_path: &impl AsRef<str>) -> PathBuf {
     PathBuf::from(file_path.as_ref())
 }
 
@@ -97,16 +24,13 @@ fn mk_file(file_path: &impl AsRef<str>) -> Result<File> {
     return File::create(file_path.as_ref());
 }
 
-type Text = String;
-pub fn read_string<Path: AsRef<str>>(file_path: &Path) -> Result<Text> {
+pub fn read_string<Path: AsRef<str>>(file_path: &Path) -> Result<String> {
     let mut buf = String::new();
     get_file(file_path)?.read_to_string(&mut buf)?;
 
     return Ok(buf);
 }
 
-type Line = String;
-type Lines = Vec<Line>;
 pub fn read_lines<Path: AsRef<str>>(file_path: &Path) -> Result<Lines> {
     Ok(read_string(file_path)?
         .lines()
@@ -192,10 +116,10 @@ mod tests {
     fn read_string() -> Result<()> {
         Ok({
             // Arrange
-            let file = FilePath::access(&"Cargo.toml");
+            let file = "Cargo.toml";
 
             // Action
-            let text = file.read_string()?;
+            let text = super::read_string(&file)?;
             println!("{text}");
 
             // Assert
@@ -207,10 +131,10 @@ mod tests {
     fn read_lines() -> Result<()> {
         Ok({
             // Arrange
-            let file = FilePath::access(&"Cargo.toml");
+            let file = "Cargo.toml";
 
             // Action
-            let lines = file.read_lines()?;
+            let lines = super::read_lines(&file)?;
             for line in &lines {
                 println!("{line}");
             }
@@ -224,17 +148,17 @@ mod tests {
     fn write_string() -> Result<()> {
         Ok({
             // Arrange
-            let file = FilePath::access(&"write_string.txt");
+            let file = "write_string/file_access.txt";
             let text = "Hello, World!";
 
             // Action
-            file.write_string(&text)?;
+            super::write_string(&file, &text)?;
 
             // Assert
-            assert_eq!(file.read_string()?, text);
+            assert_eq!(super::read_string(&file)?, text);
 
             // Clean-up
-            file.delete()?;
+            super::delete(&"write_string")?;
         })
     }
 
@@ -242,20 +166,20 @@ mod tests {
     fn write_lines() -> Result<()> {
         Ok({
             // Arrange
-            let file = FilePath::access(&"write_lines.txt");
+            let file = "write_lines/file_access.txt";
             let lines = "Hello, World!"
                 .split_whitespace()
                 .map(ToString::to_string)
                 .collect();
 
             // Action
-            file.write_lines(&lines)?;
+            super::write_lines(&file, &lines)?;
 
             // Assert
-            assert_eq!(file.read_lines()?, lines);
+            assert_eq!(super::read_lines(&file)?, lines);
 
             // Clean-up
-            file.delete()?;
+            super::delete(&"write_lines")?;
         })
     }
 
@@ -263,18 +187,18 @@ mod tests {
     fn append_string() -> Result<()> {
         Ok({
             // Arrange
-            let file = FilePath::access(&"append_string.txt");
+            let file = "append_string/file_access.txt";
             let text = "Hello, World!";
-            file.write_string(&text)?;
+            super::write_string(&file, &text)?;
 
             // Action
-            file.append_string(&text)?;
+            super::append_string(&file, &text)?;
 
             // Assert
-            assert_eq!(file.read_string()?, format!("{text}{text}"));
+            assert_eq!(super::read_string(&file)?, format!("{text}{text}"));
 
             // Clean-up
-            file.delete()?;
+            super::delete(&"append_string")?;
         })
     }
 
@@ -282,19 +206,19 @@ mod tests {
     fn append_lines() -> Result<()> {
         Ok({
             // Arrange
-            let file = FilePath::access(&"append_lines.txt");
+            let file = "append_lines/file_access.txt";
             let lines1 = vec!["1", "2"]; // .to_vec_string();
-            file.write_lines(&lines1)?;
+            super::write_lines(&file, &lines1)?;
 
             // Action
             let lines2 = vec!["3", "4"]; //.to_vec_string();
-            file.append_lines(&lines2)?;
+            super::append_lines(&file, &lines2)?;
 
             // Assert
-            assert_eq!(file.read_lines()?, vec!["1", "2", "3", "4"]); // .to_vec_string());
+            assert_eq!(super::read_lines(&file)?, vec!["1", "2", "3", "4"]); // .to_vec_string());
 
             // Clean-up
-            file.delete()?;
+            super::delete(&"append_lines")?;
         })
     }
 
@@ -302,15 +226,17 @@ mod tests {
     fn delete() -> Result<()> {
         Ok({
             // Arrange
-            let path = "delete.txt";
-            let file = FilePath::access(&path);
-            mk_file(&path)?;
+            let file = "delete/file_access.txt";
+            mk_file(&file)?;
 
             // Action
-            file.delete()?;
+            super::delete(&file)?;
 
             // Assert
-            assert!(!path_of(&path).exists(), "{path} should no longer exist");
+            assert!(!path_of(&file).exists(), "{file} should no longer exist");
+
+            // Clean-up
+            super::delete(&"delete")?;
         })
     }
 
@@ -318,13 +244,12 @@ mod tests {
     fn copy() -> Result<()> {
         Ok({
             // Arrange
-            let from = "copy_from.txt";
-            let to = "copy_to.txt";
-            let file = FilePath::access(&from);
-            file.write_string(&"Hello, World!")?;
+            let from = "copy_from/file_access.txt";
+            let to = "copy_to/file_access.txt";
+            super::write_string(&from, &"Hello, World!")?;
 
             // Action
-            file.copy_to(&to)?;
+            super::copy(&from, &to)?;
 
             // Assert
             assert_eq!(
@@ -334,8 +259,8 @@ mod tests {
             );
 
             // Clean-up
-            super::delete(&from)?;
-            super::delete(&to)?;
+            super::delete(&"copy_from")?;
+            super::delete(&"copy_to")?;
         })
     }
 
@@ -343,14 +268,13 @@ mod tests {
     fn rename() -> Result<()> {
         Ok({
             // Arrange
-            let from = "rename_from.txt";
-            let to = "rename_to.txt";
+            let from = "rename_from/file_access.txt";
+            let to = "rename_to/file_access.txt";
             let text = "Hello, World!";
-            let file = FilePath::access(&from);
-            file.write_string(&text)?;
+            super::write_string(&from, &text)?;
 
             // Action
-            file.rename_to(&to)?;
+            super::rename(&from, &to)?;
 
             // Assert
             assert!(!path_of(&from).exists(), "{from} should no longer exist");
@@ -361,7 +285,8 @@ mod tests {
             );
 
             // Clean-up
-            super::delete(&to)?;
+            super::delete(&"rename_from")?;
+            super::delete(&"rename_to")?;
         })
     }
 }
