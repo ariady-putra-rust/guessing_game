@@ -4,7 +4,19 @@ pub struct Unit;
 Unit-like structs can be useful when you need to implement a trait on some type but don't have any data that you want to store in the type itself
 */
 
-/* Tuple Struct */
+pub struct X(u8);
+impl X {
+    pub fn new(x: u8) -> Self {
+        X(x)
+    }
+
+    pub fn x(&self) -> u8 {
+        self.0
+    }
+}
+
+/* Tuple Structs */
+pub struct XY(u8, u8);
 pub struct XYZ(u8, u8, u8);
 
 impl XYZ {
