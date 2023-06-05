@@ -1,4 +1,7 @@
-/* Borrowing */
+/* Borrowing Rules */
+// 1. At any given time, you can have _either_ (but not both) one mutable reference or any number of immutable references.
+// 2. References must always be valid.
+
 // The opposite of referencing by using `&` is dereferencing,
 // which is accomplished with the dereference operator `*`
 pub fn borrowing() {
